@@ -1,25 +1,33 @@
 import json
 import os.path
-import time
-
-import requests
-from core.audio_device import AudioDevice
-from core.lock import Lockable
+import asyncio
 from chat.client.chat_client import ChatClientWithSQLite
 from chat.client.responses import ChatResponse
 from chat.data.entity import Message
-from utils import log
 from langchain_community.llms import Ollama
-from config import Configuration
-from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
-import base64
+from tts_stt_local.tts_byedge import EdgeTTSConverter
+def add_ffmpeg_to_path(ffmpeg_path):
+    # 获取当前的 PATH 环境变量
+    current_path = os.environ.get('PATH', '')
+    
+    # 将 ffmpeg 路径添加到 PATH
+    if ffmpeg_path not in current_path:
+        os.environ['PATH'] = ffmpeg_path + os.pathsep + current_path
+        print(f"FFmpeg 路径 {ffmpeg_path} 已添加到环境变量 PATH 中")
+    else:
+        print(f"FFmpeg 路径 {ffmpeg_path} 已经在环境变量 PATH 中")
+
+# ffmpeg 安装路径
+ffmpeg_path = r'ffmpeg-6.1.1-full_build-shared\bin'  # 替换为你 ffmpeg 的实际安装路径
+
+# 调用函数将 ffmpeg 添加到 PATH
 
 class ollama_myself(ChatClientWithSQLite):
     API_KEY: str
     SECRET_KEY: str
     KEY_SRC = "role"
     KEY_CONTENT = "content"
-
+    EdgeTTS = EdgeTTSConverter
     MODEL: str = "qwen2:latest"
     API: str = "https:localhost:11434"
     VALUE_USER = "user"
@@ -33,6 +41,9 @@ class ollama_myself(ChatClientWithSQLite):
         self.host = "localhost"
         self.port = "11434"
         self.MODEL = "qwen2"
+        self.wav_output_path = "test_output.wav"
+        self.EdgeTTS = EdgeTTSConverter()
+        add_ffmpeg_to_path(ffmpeg_path)
     def chat(self,text):
         Message.create(chatId=self.config.chatId.value, dst=self.VALUE_ASSISTANT, src=self.VALUE_USER, text=text)
         self.messages.append({
@@ -49,6 +60,7 @@ class ollama_myself(ChatClientWithSQLite):
             'role': self.VALUE_ASSISTANT,
             'content': res
         })
+        asyncio.run(self.EdgeTTS.convert_text_to_wav(res, 'test_output.wav'))
         Message.create(chatId=self.config.chatId.value, src=self.VALUE_ASSISTANT, dst=self.VALUE_USER, text=res)
 
         return ChatResponse({'text': res,'audio':'test_output.wav'})
@@ -68,7 +80,3 @@ class ollama_myself(ChatClientWithSQLite):
                 self.expire_at = x.get('expire_at')
 
         return super().loadMessages(chat_id)
-class ollama_tts(AudioDevice):
-    def __init__(self, volumeConfig: Configuration, onFinishCallback: callable):
-        super().__init__(volumeConfig, onFinishCallback)
-    pass
