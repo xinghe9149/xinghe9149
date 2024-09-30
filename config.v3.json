@@ -1,0 +1,46 @@
+{
+    "model": {
+        "auto_repair": false,
+        "drawX": 0.0,
+        "drawY": 0.0,
+        "lip_sync": 1.0,
+        "name": "ariu",
+        "motion_interval": 10,
+        "resource_dir": "Resources/v3",
+        "scale": 1.0
+    },
+    "chat": {
+        "charaId": "toyama kasumi",
+        "chatId": "e1cc04f4-3b6c-4904-9a2c-14a700fa6aea",
+        "user": "user"
+    },
+    "server": {
+        "server": "",
+        "textPath": "",
+        "voicePath": ""
+    },
+    "mouse": {
+        "click_transparent": true,
+        "enable": false,
+        "eye_tracking": true
+    },
+    "scene": {
+        "fps": 30,
+        "height": 400,
+        "lastX": 135,
+        "lastY": 466,
+        "stay_on_top": true,
+        "visible": true,
+        "width": 340
+    },
+    "systray": {
+        "icon": "Resources/icon.png"
+    },
+    "QFluentWidgets": {
+        "ThemeColor": "#ff009faa",
+        "ThemeMode": "Light"
+    },
+    "audio": {
+        "volume": 100
+    }
+}

@@ -1,0 +1,14 @@
+__pycache__/
+testenv
+*.zip
+*.rar
+*.tar.gz
+.idea
+test
+*.db
+
+access_token.json
+access_token.*.json
+
+.venv
+/Resources/v3/草莓兔兔 试用/
