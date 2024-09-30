@@ -13,13 +13,6 @@ from langchain_community.llms import Ollama
 from config import Configuration
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import base64
-def encode_wav_to_base64(file_path):
-    with open(file_path, 'rb') as wav_file:
-        # 读取文件内容
-        audio_data = wav_file.read()
-        # 编码为Base64
-        base64_audio = base64.b64encode(audio_data).decode('utf-8')
-    return base64_audio
 
 class ollama_myself(ChatClientWithSQLite):
     API_KEY: str

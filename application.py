@@ -8,7 +8,7 @@ from qfluentwidgets import qconfig, Flyout
 
 from app import live2d, settings
 from chat.client.baidu.qianfan import Qianfan
-from chat.client.baidu.ollama_client import ollama_myself,ollama_tts
+from chat.client.baidu.ollama_client import ollama_myself
 from config.configuration import Configuration
 from core.audio_device import AudioDevice
 from core.chat_delegate import ChatDelegate
@@ -99,8 +99,8 @@ class Application(
         self.chatDelegate = ChatDelegate()
         #self.ollama_audio = ollama_tts()
         self.flyoutChatBox.sent.connect(self.chat)
-        #self.chatDelegate.setup(self.config, Qianfan(settings.API_KEY, settings.SECRET_KEY))
         self.chatDelegate.setup(self.config, ollama_myself(settings.API_KEY, settings.SECRET_KEY))
+        #self.chatDelegate.setup(self.config, Qianfan(settings.API_KEY, settings.SECRET_KEY))
         self.signals.sentSucceeded.connect(self.chatCallback)
 
         live2d.init()

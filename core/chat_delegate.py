@@ -12,5 +12,4 @@ class ChatDelegate:
 
     def chat(self, msg: str, callback: callable):
         response: ChatResponse = self.chatClient.chat(msg)
-        #print(response.audio())
         callback(response.text(), response.audio())
